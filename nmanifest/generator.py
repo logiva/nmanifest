@@ -101,7 +101,11 @@ class EnvironmentGenerator:
         return result
 
     def _apply_yaml_overrides(self, generatorconfig: dict, jinja2_rendered_manifests: dict):
-        for override in generatorconfig.get("overrides", []) or []:
+        overridelist = generatorconfig.get("overrides", [])
+        if not type(overridelist) == list:
+            raise Exception("Override section must be list type")
+
+        for override in overridelist:
             override_values = override.get('values', None)
             if not override_values:
                 raise Exception("Override section must contain a values section")
